@@ -88,8 +88,8 @@ namespace SocketServer {
         #region Handling
         private void client_listener_listen() {
             client_listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-            //client_listener.Bind(new IPEndPoint(IPAddress.Parse("147.135.120.177"), 25725));
-            client_listener.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.8"), 666));
+            client_listener.Bind(new IPEndPoint(IPAddress.Parse("147.135.120.177"), 25725));
+            //client_listener.Bind(new IPEndPoint(IPAddress.Parse("192.168.1.8"), 666));
             client_listener.Listen();
             while(true) {
                 try {

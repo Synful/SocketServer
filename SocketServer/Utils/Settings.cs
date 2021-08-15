@@ -20,6 +20,7 @@ namespace SocketServer.Utils {
         }
 
         public uint[] addrs;
+        public string checksum;
         public float menu_size;
         public string version;
         public bool freemode;

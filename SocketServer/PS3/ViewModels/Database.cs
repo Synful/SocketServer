@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using SocketServer.Utils;
 
 namespace SocketServer.PS3.ViewModels {
     public class Database {
@@ -113,14 +114,6 @@ namespace SocketServer.PS3.ViewModels {
         public Auth_Codes AuthClient(string lic, string mac, string psid, string cs, string version) {
             Auth_Codes ret = Auth_Codes.AuthSuccess;
 
-            if(version != "3.3") {
-                ret = Auth_Codes.InvalidVersion;
-                goto end;
-            }
-
-            //if(cs != "")
-            //    ret = Auth_Codes.InvalidChecksum; goto end;
-
             if(lic == "" || mac == "" || psid == "" || cs == "") {
                 ret = Auth_Codes.EmptyInputs;
                 goto end;
@@ -128,6 +121,16 @@ namespace SocketServer.PS3.ViewModels {
 
             if(!ValidKey(lic)) {
                 ret = Auth_Codes.InvalidLicense;
+                goto end;
+            }
+
+            if(version != "3.3") {
+                ret = Auth_Codes.InvalidVersion;
+                goto end;
+            }
+
+            if(cs != Settings.instance.checksum) {
+                ret = Auth_Codes.InvalidChecksum;
                 goto end;
             }
 

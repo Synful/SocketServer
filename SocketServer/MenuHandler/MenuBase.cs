@@ -11,12 +11,15 @@ namespace SocketServer.MenuHandler {
     public class MenuBase {
         Thread render_t;
         Thread choice_t;
+        Thread settings_t;
 
         public MenuBase() {
             render_t = new Thread(() => render_thread());
             render_t.Start();
             choice_t = new Thread(() => choice_thread());
             choice_t.Start();
+            settings_t = new Thread(() => settings_thread());
+            settings_t.Start();
         }
 
         void render_thread() {
@@ -50,6 +53,15 @@ namespace SocketServer.MenuHandler {
                             break;
                     }
                 } catch { };
+                Thread.Sleep(3 * 1000);
+            }
+        }
+        void settings_thread() {
+            while(true) {
+                try {
+                    Settings.instance.Load();
+                } catch { }
+                Thread.Sleep(60 * 1000);
             }
         }
 

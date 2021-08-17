@@ -88,10 +88,15 @@ namespace SocketServer.Utils {
             }
         }
 
-        private string logfile = "log.txt";
-        private string errorfile = "error.txt";
+        private string logfile = "Logs/log.txt";
+        private string errorfile = "Logs/error.txt";
+        private string authfile = "Logs/auth.txt";
 
-        public Logger() { }
+        public Logger() {
+            if(!Directory.Exists("Logs")) {
+                Directory.CreateDirectory("Logs");
+            }
+        }
 
         public List<Log> logs = new List<Log>(10);
 
@@ -111,7 +116,7 @@ namespace SocketServer.Utils {
         public void Auth(ClientInfo info) {
             pushlog(new Log(Log.lType.Auth, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", info));
             Database.instance.LogAuth(info, DateTimeOffset.Now.ToUnixTimeSeconds());
-            File.AppendAllText(logfile, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")} [Auth] {info.name} | {info.lic} | {info.mac} | {info.psid} | {info.checksum} | {info.code}\n");
+            File.AppendAllText(authfile, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")} [Auth] {info.name} | {info.lic} | {info.mac} | {info.psid} | {info.checksum} | {info.code}\n");
         }
         public void Command(string msg) {
             pushlog(new Log(Log.lType.Command, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", msg));

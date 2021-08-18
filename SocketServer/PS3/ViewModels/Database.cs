@@ -148,36 +148,29 @@ namespace SocketServer.PS3.ViewModels {
         }
 
         public Auth_Codes AuthClient(string lic, string mac, string psid, string cs, string version) {
-            Auth_Codes ret = Auth_Codes.AuthSuccess;
             try {
                 if(lic == "" || mac == "" || psid == "" || cs == "") {
-                    ret = Auth_Codes.EmptyInputs;
-                    goto end;
+                    return Auth_Codes.EmptyInputs;
                 }
 
                 if(!ValidKey(lic)) {
-                    ret = Auth_Codes.InvalidLicense;
-                    goto end;
+                    return Auth_Codes.InvalidLicense;
                 }
 
                 if(version != "3.3") {
-                    ret = Auth_Codes.InvalidVersion;
-                    goto end;
+                    return Auth_Codes.InvalidVersion;
                 }
 
-                if(cs != Settings.instance.checksum) {
-                    ret = Auth_Codes.InvalidChecksum;
-                    goto end;
-                }
+                //if(cs != Settings.instance.checksum) {
+                //    return Auth_Codes.InvalidChecksum;
+                //}
 
                 if(mac == "000000000000") {
-                    ret = Auth_Codes.InvalidMac;
-                    goto end;
+                    return Auth_Codes.InvalidMac;
                 }
 
                 if(psid == "00000000000000000000000000000000") {
-                    ret = Auth_Codes.InvalidPsid;
-                    goto end;
+                    return Auth_Codes.InvalidPsid;
                 }
 
                 con.Open();
@@ -186,14 +179,12 @@ namespace SocketServer.PS3.ViewModels {
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 rdr.Read();
 
-                if(rdr["banned"].ToString() == "1") {
-                    ret = Auth_Codes.UserIsBanned;
-                    goto end;
+                if(rdr["banned"].ToString() == "True") {
+                    return Auth_Codes.UserIsBanned;
                 }
 
                 if(convDate(Convert.ToDouble(rdr["enddate"].ToString())) < DateTime.Now && !isFreemode()) {
-                    ret = Auth_Codes.TimeExpired;
-                    goto end;
+                    return Auth_Codes.TimeExpired;
                 }
 
                 if(rdr["setlock"].ToString() == "1") {
@@ -205,25 +196,23 @@ namespace SocketServer.PS3.ViewModels {
                     goto mac;
                 } else {
                     if(psid != rdr["psid"].ToString()) {
-                        ret = Auth_Codes.InvalidPsid;
-                        goto end;
+                        return Auth_Codes.InvalidPsid;
                     }
                 }
             mac:
                 if(mac != rdr["mac"].ToString()) {
-                    ret = Auth_Codes.InvalidMac;
+                    return Auth_Codes.InvalidMac;
                 }
 
-            end:
                 con.Close();
+                return Auth_Codes.AuthSuccess;
             } catch (Exception ex) {
                 Logger.inst.Error(ex.ToString());
                 if(con.State == System.Data.ConnectionState.Open) {
                     con.Close();
                 }
-                ret = Auth_Codes.UnknownError;
+                return Auth_Codes.UnknownError;
             }
-            return ret;
         }
 
         private DateTime convDate(double unixTimeStamp) {

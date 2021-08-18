@@ -145,7 +145,7 @@ namespace SocketServer {
 
                     i.code = Database.instance.AuthClient(i.lic, i.mac, i.psid, i.checksum, i.version);
 
-                    if(!i.reauth)
+                    if(!i.reauth && i.name != "")
                         Logger.inst.Auth(i);
 
                     i.user.Send_Command(e.auth);

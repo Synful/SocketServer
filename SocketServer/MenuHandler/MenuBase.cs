@@ -1,4 +1,6 @@
-﻿using SocketServer.Utils;
+﻿using SocketServer.PC;
+using SocketServer.PS3;
+using SocketServer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +47,9 @@ namespace SocketServer.MenuHandler {
                     string cmd = System.Console.ReadLine().ToLower();
                     switch(cmd) {
                         case "kill":
-                            Program.inst.DisconnectServer();
-                            Environment.Exit(0);
+                            Main_PS3.inst.Close();
+                            Main_PC.inst.Close();
+                            //Environment.Exit(0);
                             break;
                         case "reload":
                             Settings.instance.Load();
@@ -82,7 +85,7 @@ namespace SocketServer.MenuHandler {
 
             Console.write("Users Online", ConsoleColor.Cyan);
             Console.write(": ", ConsoleColor.Gray);
-            Console.write($"{Program.inst.clients.Count}\n\n", ConsoleColor.White);
+            Console.write($"{Main_PS3.inst.clients.Count}\n\n", ConsoleColor.White);
         }
         void render_commands() {
             Console.writetitle("Genisys Server Command Line");

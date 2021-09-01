@@ -89,7 +89,7 @@ namespace SocketServer.PS3.ViewModels {
                 con.Open();
 
                 MySqlCommand cmd = con.CreateCommand();
-                cmd.CommandText = "INSERT INTO logins(username, license, ip, mac, psid, checksum, version, date, type, success, info) VALUES(@name, @lic, @ip, @mac, @psid, @cs, @ver, @date, @type, @success, @code)";
+                cmd.CommandText = "INSERT INTO logins(username, license, ip, mac, psid, checksum, version, date, type, info) VALUES(@name, @lic, @ip, @mac, @psid, @cs, @ver, @date, @type, @code)";
                 cmd.Parameters.AddWithValue("@name", $"{info.name}");
                 cmd.Parameters.AddWithValue("@lic", $"{info.lic}");
                 cmd.Parameters.AddWithValue("@ip", $"{info.ip}");
@@ -99,7 +99,6 @@ namespace SocketServer.PS3.ViewModels {
                 cmd.Parameters.AddWithValue("@ver", $"{info.version}");
                 cmd.Parameters.AddWithValue("@date", $"{date}");
                 cmd.Parameters.AddWithValue("@type", "PS3");
-                cmd.Parameters.AddWithValue("@success", $"{(info.code == Auth_Codes.AuthSuccess ? "1" : "0")}");
                 cmd.Parameters.AddWithValue("@code", $"{info.code}");
                 cmd.ExecuteNonQuery();
 

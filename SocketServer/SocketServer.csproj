@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <Reference Include="MySql.Data">
-      <HintPath>..\..\AdminTool\AdminTool\bin\Debug\MySql.Data.dll</HintPath>
+      <HintPath>bin\Debug\net5.0\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\..\AdminTool\AdminTool\bin\Debug\Renci.SshNet.dll</HintPath>

@@ -2,7 +2,6 @@ C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\SocketServer.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\ref\SocketServer.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\SocketServer.pdb
-C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.csproj.AssemblyReference.cache
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.AssemblyInfoInputs.cache
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.AssemblyInfo.cs
@@ -14,8 +13,6 @@ C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\SocketServer.runtimeconfig.json
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\SocketServer.runtimeconfig.dev.json
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.genruntimeconfig.cache
-C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\MySql.Data.dll
-C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\Renci.SshNet.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.csproj.CopyComplete
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\System.Drawing.Common.dll

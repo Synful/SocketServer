@@ -29,7 +29,7 @@ namespace SocketServer.Utils {
                     break;
                 case lType.Auth:
                     Console.write("[", ConsoleColor.Gray);
-                    Console.write("Auth", ConsoleColor.Cyan);
+                    Console.write(info.reauth ? "Reauth" : "Auth", ConsoleColor.Cyan);
                     Console.write("] ", ConsoleColor.Gray);
                     Console.write(info.name, ConsoleColor.Cyan);
                     Console.write(" | ", ConsoleColor.Gray);
@@ -115,8 +115,10 @@ namespace SocketServer.Utils {
         }
         public void Auth(ClientInfo info) {
             pushlog(new Log(Log.lType.Auth, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", info));
-            Database.instance.LogAuth(info, DateTimeOffset.Now.ToUnixTimeSeconds());
-            File.AppendAllText(authfile, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")} [Auth] {info.name} | {info.lic} | {info.mac} | {info.psid} | {info.checksum} | {info.code}\n");
+            File.AppendAllText(authfile, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")} [{(info.reauth ? "Reauth" : "Auth")}] {info.name} | {info.lic} | {info.mac} | {info.psid} | {info.checksum} | {info.code}\n");
+            if(!info.reauth) {
+                Database.instance.LogAuth(info, DateTimeOffset.Now.ToUnixTimeSeconds());
+            }
         }
         public void Command(string msg) {
             pushlog(new Log(Log.lType.Command, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", msg));

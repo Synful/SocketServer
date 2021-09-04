@@ -1,4 +1,5 @@
-﻿using SocketServer.PS3.Commands;
+﻿using MySql.Data.MySqlClient;
+using SocketServer.PS3.Commands;
 using SocketServer.Utils;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,14 @@ namespace SocketServer.PS3.ViewModels {
         public Auth_Codes code { get; set; }
         public bool reauth { get; set; }
 
-        public ClientInfo(Client c, string n, IPAddress ip, string l, string m, string p, string cs, string ver, bool r) {
+        public bool banned { get; set; }
+        public double enddate { get; set; }
+        public bool setlock { get; set; }
+        public string dbmac { get; set; }
+        public string dbpsid { get; set; }
+
+        public ClientInfo(Client c, IPAddress ip, string l, string m, string p, string cs, string ver, bool r) {
             user = c;
-            name = n;
             this.ip = ip;
             lic = l;
             mac = m;
@@ -37,6 +43,8 @@ namespace SocketServer.PS3.ViewModels {
             checksum = cs;
             version = ver;
             reauth = r;
+
+            name = Database.instance.GetUsername(this);
         }
     }
 
@@ -92,7 +100,7 @@ namespace SocketServer.PS3.ViewModels {
                             string version = msg.read_string();
                             bool reauth = msg.read_bool();
 
-                            info = new ClientInfo(this, Database.instance.GetUsername(lic), this.IP, lic, mac, psid, cs, version, reauth);
+                            info = new ClientInfo(this, this.IP, lic, mac, psid, cs, version, reauth);
 
                             this.OnCommandReceived(new CommandEventArgs(new auth(IP, info)));
                             break;

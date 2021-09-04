@@ -18,9 +18,6 @@
     <Reference Include="MySql.Data">
       <HintPath>bin\Debug\net5.0\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Renci.SshNet">
-      <HintPath>..\..\AdminTool\AdminTool\bin\Debug\Renci.SshNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

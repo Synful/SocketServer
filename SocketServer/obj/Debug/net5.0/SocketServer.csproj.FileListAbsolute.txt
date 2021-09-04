@@ -29,3 +29,4 @@ C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\System.Management.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketServer\obj\Debug\net5.0\SocketServer.csproj.AssemblyReference.cache

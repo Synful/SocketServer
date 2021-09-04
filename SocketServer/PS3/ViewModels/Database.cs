@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,8 +24,8 @@ namespace SocketServer.PS3.ViewModels {
             AuthSuccess
         }
 
-        private MySqlConnection con;
-        
+        public MySqlConnection con;
+
         private static Database _instance;
         public static Database instance {
             get {
@@ -37,77 +38,68 @@ namespace SocketServer.PS3.ViewModels {
 
         public Database() {
             con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+            con.Open();
         }
 
-        public bool ValidKey(string lic) {
+        public bool ValidKey(ClientInfo i) {
             try {
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
-                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{lic}'", con);
+                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{i.lic}'", con);
                 MySqlDataReader rdr = cmd.ExecuteReader();
 
                 bool ret = rdr.HasRows;
 
                 rdr.Close();
-                con.Close();
 
                 return ret;
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
                 return false;
             }
         }
 
-        public string GetUsername(string lic) {
+        public string GetUsername(ClientInfo i) {
             try {
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
-                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{lic}'", con);
+                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{i.lic}'", con);
                 MySqlDataReader rdr = cmd.ExecuteReader();
 
                 rdr.Read();
                 string ret = rdr["username"].ToString();
 
                 rdr.Close();
-                con.Close();
 
                 return ret;
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
                 return "";
             }
         }
 
-        public void LogAuth(ClientInfo info, long date) {
+        public void LogAuth(ClientInfo i, long date) {
             try {
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
                 MySqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "INSERT INTO logins(username, license, ip, mac, psid, checksum, version, date, type, info) VALUES(@name, @lic, @ip, @mac, @psid, @cs, @ver, @date, @type, @code)";
-                cmd.Parameters.AddWithValue("@name", $"{info.name}");
-                cmd.Parameters.AddWithValue("@lic", $"{info.lic}");
-                cmd.Parameters.AddWithValue("@ip", $"{info.ip}");
-                cmd.Parameters.AddWithValue("@mac", $"{info.mac}");
-                cmd.Parameters.AddWithValue("@psid", $"{info.psid}");
-                cmd.Parameters.AddWithValue("@cs", $"{info.checksum}");
-                cmd.Parameters.AddWithValue("@ver", $"{info.version}");
+                cmd.Parameters.AddWithValue("@name", $"{i.name}");
+                cmd.Parameters.AddWithValue("@lic", $"{i.lic}");
+                cmd.Parameters.AddWithValue("@ip", $"{i.ip}");
+                cmd.Parameters.AddWithValue("@mac", $"{i.mac}");
+                cmd.Parameters.AddWithValue("@psid", $"{i.psid}");
+                cmd.Parameters.AddWithValue("@cs", $"{i.checksum}");
+                cmd.Parameters.AddWithValue("@ver", $"{i.version}");
                 cmd.Parameters.AddWithValue("@date", $"{date}");
                 cmd.Parameters.AddWithValue("@type", "PS3");
-                cmd.Parameters.AddWithValue("@code", $"{info.code}");
+                cmd.Parameters.AddWithValue("@code", $"{i.code}");
                 cmd.ExecuteNonQuery();
-
-                con.Close();
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
             }
         }
 
@@ -115,44 +107,40 @@ namespace SocketServer.PS3.ViewModels {
             return Settings.instance.freemode;
         }
 
-        public void UpdateMac(string lic, string mac) {
+        public void UpdateMac(ClientInfo i) {
             try {
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
-                MySqlCommand cmd = new MySqlCommand($"UPDATE users SET mac = '{mac}' WHERE license = '{lic}'", con);
+                MySqlCommand cmd = new MySqlCommand($"UPDATE users SET mac = '{i.mac}' WHERE license = '{i.lic}'", con);
                 cmd.ExecuteNonQuery();
 
-                con.Close();
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
             }
         }
-        public void UpdatePsid(string lic, string psid) {
+        public void UpdatePsid(ClientInfo i) {
             try {
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
-                MySqlCommand cmd = new MySqlCommand($"UPDATE users SET psid = '{psid}' WHERE license = '{lic}'", con);
+                MySqlCommand cmd = new MySqlCommand($"UPDATE users SET psid = '{i.psid}', setlock = 0 WHERE license = '{i.lic}'", con);
                 cmd.ExecuteNonQuery();
 
-                con.Close();
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
             }
         }
 
-        public Auth_Codes AuthClient(string lic, string mac, string psid, string cs, string version) {
+        public Auth_Codes AuthClient(ClientInfo i) {
             try {
+                string lic = i.lic, mac = i.mac, psid = i.psid, cs = i.checksum, version = i.version;
+
                 if(lic == "" || mac == "" || psid == "" || cs == "") {
                     return Auth_Codes.EmptyInputs;
                 }
 
-                if(!ValidKey(lic)) {
+                if(!ValidKey(i)) {
                     return Auth_Codes.InvalidLicense;
                 }
 
@@ -160,9 +148,9 @@ namespace SocketServer.PS3.ViewModels {
                     return Auth_Codes.InvalidVersion;
                 }
 
-                //if(cs != Settings.instance.checksum) {
-                //    return Auth_Codes.InvalidChecksum;
-                //}
+                if(cs != Settings.instance.checksum) {
+                    return Auth_Codes.InvalidChecksum;
+                }
 
                 if(mac == "000000000000") {
                     return Auth_Codes.InvalidMac;
@@ -172,44 +160,50 @@ namespace SocketServer.PS3.ViewModels {
                     return Auth_Codes.InvalidPsid;
                 }
 
-                con.Open();
+                if(con.State != ConnectionState.Open)
+                    con.Open();
 
                 MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{lic}'", con);
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 rdr.Read();
 
-                if(rdr["banned"].ToString() == "True") {
+                i.banned = bool.Parse(rdr["banned"].ToString());
+                i.enddate = Convert.ToDouble(rdr["enddate"].ToString());
+                i.setlock = bool.Parse(rdr["setlock"].ToString());
+                i.dbmac = rdr["mac"].ToString();
+                i.dbpsid = rdr["psid"].ToString();
+
+                rdr.Close();
+
+                if(i.banned) {
                     return Auth_Codes.UserIsBanned;
                 }
 
-                if(convDate(Convert.ToDouble(rdr["enddate"].ToString())) < DateTime.Now && !isFreemode()) {
+                if(convDate(i.enddate) < DateTime.Now && !isFreemode()) {
                     return Auth_Codes.TimeExpired;
                 }
-
-                if(rdr["setlock"].ToString() == "1") {
-                    if(rdr["mac"].ToString() == "") {
-                        UpdateMac(lic, mac);
+                bool updatedMac = false;
+                if(i.setlock) {
+                    if(i.dbmac == "" || i.dbmac == null || i.dbmac == "NULL") {
+                        UpdateMac(i);
+                        updatedMac = true;
                     }
 
-                    UpdatePsid(lic, psid);
+                    UpdatePsid(i);
                     goto mac;
                 } else {
-                    if(psid != rdr["psid"].ToString()) {
+                    if(psid != i.dbpsid) {
                         return Auth_Codes.InvalidPsid;
                     }
                 }
             mac:
-                if(mac != rdr["mac"].ToString()) {
+                if(mac != i.dbmac && !updatedMac) {
                     return Auth_Codes.InvalidMac;
                 }
 
-                con.Close();
                 return Auth_Codes.AuthSuccess;
             } catch (Exception ex) {
                 Logger.inst.Error(ex.ToString());
-                if(con.State == System.Data.ConnectionState.Open) {
-                    con.Close();
-                }
                 return Auth_Codes.UnknownError;
             }
         }

@@ -108,7 +108,7 @@ namespace SocketServer.PS3 {
                 case cmdType.Auth:
                     ClientInfo i = e.auth.info;
 
-                    i.code = Database.instance.AuthClient(i.lic, i.mac, i.psid, i.checksum, i.version);
+                    i.code = Database.instance.AuthClient(i);
 
                     if(i.name != "")
                         Logger.inst.Auth(i);

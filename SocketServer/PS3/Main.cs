@@ -24,8 +24,8 @@ namespace SocketServer.PS3 {
 
         private IPEndPoint ep;
 
-        Thread client_listener_t;
         public List<Client> clients;
+        Thread client_listener_t;
         Socket client_listener;
 
         public Main_PS3() {

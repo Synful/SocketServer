@@ -43,8 +43,6 @@ namespace SocketServer.PS3.ViewModels {
             checksum = cs;
             version = ver;
             reauth = r;
-
-            name = Database.instance.GetUsername(this);
         }
     }
 

@@ -27,6 +27,11 @@ namespace SocketServer.PC {
         public List<Admin> admins;
         Socket admin_listener;
 
+        /*
+         To send packets back and fourth for admin panel just serialize the command to json and deserialzie it
+         
+         */
+
         public Main_PC() {
             Logger.inst.Info("Starting Genisys Admin Server...");
 

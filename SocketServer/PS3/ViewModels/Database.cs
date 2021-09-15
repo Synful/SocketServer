@@ -56,27 +56,10 @@ namespace SocketServer.PS3.ViewModels {
                 return ret;
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
+                con.Close();
+                con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+                con.Open();
                 return false;
-            }
-        }
-
-        public string GetUsername(ClientInfo i) {
-            try {
-                if(con.State != ConnectionState.Open)
-                    con.Open();
-
-                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{i.lic}'", con);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-
-                rdr.Read();
-                string ret = rdr["username"].ToString();
-
-                rdr.Close();
-
-                return ret;
-            } catch(Exception ex) {
-                Logger.inst.Error(ex.ToString());
-                return "";
             }
         }
 
@@ -100,6 +83,9 @@ namespace SocketServer.PS3.ViewModels {
                 cmd.ExecuteNonQuery();
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
+                con.Close();
+                con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+                con.Open();
             }
         }
 
@@ -117,6 +103,9 @@ namespace SocketServer.PS3.ViewModels {
 
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
+                con.Close();
+                con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+                con.Open();
             }
         }
         public void UpdatePsid(ClientInfo i) {
@@ -129,6 +118,9 @@ namespace SocketServer.PS3.ViewModels {
 
             } catch(Exception ex) {
                 Logger.inst.Error(ex.ToString());
+                con.Close();
+                con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+                con.Open();
             }
         }
 
@@ -166,7 +158,7 @@ namespace SocketServer.PS3.ViewModels {
                 MySqlCommand cmd = new MySqlCommand($"SELECT * FROM users WHERE license = '{lic}'", con);
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 rdr.Read();
-
+                i.name = rdr["username"].ToString();
                 i.banned = bool.Parse(rdr["banned"].ToString());
                 i.enddate = Convert.ToDouble(rdr["enddate"].ToString());
                 i.setlock = bool.Parse(rdr["setlock"].ToString());
@@ -204,6 +196,9 @@ namespace SocketServer.PS3.ViewModels {
                 return Auth_Codes.AuthSuccess;
             } catch (Exception ex) {
                 Logger.inst.Error(ex.ToString());
+                con.Close();
+                con = new MySqlConnection("server=147.135.120.177;database=genisys;uid=synful;pwd=g,kDS4ig=)+S;");
+                con.Open();
                 return Auth_Codes.UnknownError;
             }
         }

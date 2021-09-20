@@ -28,12 +28,6 @@ namespace SocketServer.PS3.ViewModels {
         public Auth_Codes code { get; set; }
         public bool reauth { get; set; }
 
-        public bool banned { get; set; }
-        public double enddate { get; set; }
-        public bool setlock { get; set; }
-        public string dbmac { get; set; }
-        public string dbpsid { get; set; }
-
         public ClientInfo(Client c, IPAddress ip, string l, string m, string p, string cs, string ver, bool r) {
             user = c;
             this.ip = ip;
@@ -56,8 +50,8 @@ namespace SocketServer.PS3.ViewModels {
         private Socket socket;
         private NetworkStream stream;
         private Message msg;
-        private BackgroundWorker recv_bw;
-        private BackgroundWorker send_bw;
+        private Thread recv_t;
+        private Thread isalive_t;
         private Semaphore sema = new Semaphore(1, 1);
         #endregion
 
@@ -72,19 +66,28 @@ namespace SocketServer.PS3.ViewModels {
 
             this.msg = new Message(stream);
 
-            this.recv_bw = new BackgroundWorker();
-            this.recv_bw.DoWork += new DoWorkEventHandler(Recv);
-            this.recv_bw.RunWorkerAsync();
+            this.recv_t = new Thread(() => Recv());
+            this.recv_t.Start();
 
-            this.send_bw = new BackgroundWorker();
-            this.send_bw.DoWork += new DoWorkEventHandler(Send);
-            this.send_bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(Send_Completed);
+            this.isalive_t = new Thread(() => is_alive_t());
+            this.isalive_t.Start();
         }
         #endregion
 
         #region Private Methods
-        private void Recv(object sender, DoWorkEventArgs e) {
-            while(this.socket.Connected && this.socket.RemoteEndPoint != null) {
+        private bool is_alive = true;
+        private void is_alive_t() {
+            while(is_alive) {
+                if(this.socket.Poll(1000, SelectMode.SelectRead) && this.socket.Available == 0) {
+                    is_alive = false;
+                    break;
+                } else {
+                    Thread.Sleep(120000);
+                }
+            }
+        }
+        private void Recv() {
+            while(is_alive) {
                 try {
                     msg.load_data();
                     cmdType cType = (cmdType)msg.read_int();
@@ -111,54 +114,42 @@ namespace SocketServer.PS3.ViewModels {
                 }
             }
             this.OnDisconnected(new ClientEventArgs(this.IP, this.Port));
+            this.Disconnect();
         }
 
-        private void Send(object sender, DoWorkEventArgs e) {
-            try {
-                sema.WaitOne();
-                object o = e.Argument;
-                //Type
-                msg.write_int((int)((command)o).type);
+        private void Send(object send_obj) {
+            if(send_obj != null) {
+                try {
+                    sema.WaitOne();
+                    msg.write_int((int)((command)send_obj).type);
 
-                switch(((command)o).type) {
-                    case cmdType.Auth:
-                        auth a = (auth)o;
-                        msg.write_int((int)a.info.code);
+                    switch(((command)send_obj).type) {
+                        case cmdType.Auth:
+                            auth a = (auth)send_obj;
+                            msg.write_int((int)a.info.code);
 
-                        if(a.info.code != Auth_Codes.AuthSuccess)
+                            if(a.info.code != Auth_Codes.AuthSuccess)
+                                break;
+
+                            foreach(uint i in Settings.instance.addrs) {
+                                msg.write_uint(i);
+                            }
+
+                            msg.write_float(Settings.instance.menu_size);
+
+                            msg.send_data();
+                            sema.Release();
+
+                            this.OnCommandSent(new CommandEventArgs((auth)send_obj));
                             break;
-
-                        foreach(uint i in Settings.instance.addrs) {
-                            msg.write_uint(i);
-                        }
-
-                        msg.write_float(Settings.instance.menu_size);
-
-                        break;
+                    }
+                } catch(Exception ex) {
+                    Logger.inst.Error(ex.ToString());
+                    sema.Release();
+                    this.OnCommandFailed(new EventArgs());
                 }
-                msg.send_data();
-                sema.Release();
-                e.Result = e.Argument;
-            } catch (Exception ex) {
-                Logger.inst.Error(ex.ToString());
-                sema.Release();
-                e.Result = null;
+                send_obj = null;
             }
-        }
-        private void Send_Completed(object sender, RunWorkerCompletedEventArgs e) {
-            if(!e.Cancelled && e.Error == null && (e.Result != null)) {
-                switch(((command)e.Result).type) {
-                    case cmdType.Auth:
-                        this.OnCommandSent(new CommandEventArgs((auth)e.Result));
-                        break;
-                    default:
-                        this.OnCommandSent(new CommandEventArgs((command)e.Result));
-                        break;
-                }
-            } else
-                this.OnCommandFailed(new EventArgs());
-
-            ((BackgroundWorker)sender).Dispose();
             GC.Collect();
         }
         #endregion
@@ -166,7 +157,7 @@ namespace SocketServer.PS3.ViewModels {
         #region Public Methods
         public void Send_Command(object o) {
             if(this.socket != null && this.socket.Connected) {
-                send_bw.RunWorkerAsync(o);
+                Send(o);
             } else {
                 this.OnCommandFailed(new EventArgs());
             }
@@ -174,6 +165,9 @@ namespace SocketServer.PS3.ViewModels {
         public bool Disconnect() {
             if(this.socket != null && this.socket.Connected) {
                 try {
+                    if(is_alive)
+                        is_alive = false;
+
                     this.socket.Shutdown(SocketShutdown.Both);
                     this.socket.Close();
                     return true;
@@ -208,11 +202,8 @@ namespace SocketServer.PS3.ViewModels {
 
         public event DisconnectedEventHandler Disconnected;
         protected virtual void OnDisconnected(ClientEventArgs e) {
-            if(Disconnected != null) {
+            if(Disconnected != null)
                 Disconnected(this, e);
-            } else {
-                this.Disconnect();
-            }
         }
         #endregion
     }

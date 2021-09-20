@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using static SocketServer.PS3.Commands.command;
 
 namespace SocketServer.PS3.ViewModels {
     public delegate void CommandReceivedEventHandler(object sender, CommandEventArgs e);

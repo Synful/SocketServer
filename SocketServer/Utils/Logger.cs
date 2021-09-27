@@ -116,6 +116,9 @@ namespace SocketServer.Utils {
         public void Auth(ClientInfo info) {
             pushlog(new Log(Log.lType.Auth, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", info));
             File.AppendAllText(authfile, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")} [{(info.reauth ? "Reauth" : "Auth")}] {info.name} | {info.lic} | {info.mac} | {info.psid} | {info.checksum} | {info.code}\n");
+            if(!info.reauth) {
+                Database.instance.LogAuth(info, DateTimeOffset.Now.ToUnixTimeSeconds());
+            }
         }
         public void Command(string msg) {
             pushlog(new Log(Log.lType.Command, $"{DateTime.Now.ToString("MM/dd/yy hh:mm:ss tt")}", msg));

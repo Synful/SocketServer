@@ -16,10 +16,3 @@ C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketAdmin\o
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketAdmin\obj\Debug\Theme\ToolbarButton.baml
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketAdmin\obj\Debug\LoginWindow.g.cs
 C:\Users\Synful\Documents\Visual Studio 2019\Projects\SocketServer\SocketAdmin\obj\Debug\LoginWindow.baml
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\SocketAdmin.csproj.AssemblyReference.cache
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\Theme\ModernButton.baml
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\Theme\ToolbarButton.baml
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\LoginWindow.g.cs
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\App.g.cs
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\SocketAdmin_MarkupCompile.cache
-C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Debug\SocketAdmin_MarkupCompile.lref

@@ -33,13 +33,10 @@ namespace SocketServer.PC {
          */
 
         public Main_PC() {
-#if DEBUG
-            Logger.inst.Info("Starting Genisys Admin Server in debug mode...");
-            ep = new IPEndPoint(IPAddress.Parse("192.168.1.8"), 38426);
-#else
             Logger.inst.Info("Starting Genisys Admin Server...");
-            ep = new IPEndPoint(IPAddress.Parse("147.135.120.177"), 38426);
-#endif
+
+            //ep = new IPEndPoint(IPAddress.Parse("147.135.120.177"), 38426);
+            ep = new IPEndPoint(IPAddress.Parse("192.168.1.8"), 38426);
 
             admins = new List<Admin>();
             admin_listener_t = new Thread(() => admin_listener_listen());
@@ -53,7 +50,7 @@ namespace SocketServer.PC {
             admin_listener.Listen();
             while(true) {
                 try {
-                    AddAdmin(admin_listener.Accept());
+                    //AddAdmin(client_listener.Accept());
                 } catch { }
             }
         }

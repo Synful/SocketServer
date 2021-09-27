@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CPCryQKaV26HCUwBcBsaK1PfqSrN6rNGM83Nb3+Nhap3ruo7DpViusmdNYFZjIKr4GhMwGNH5IhYmp3/Mgbk3Q==",
+  "dgSpecHash": "CfQb5iCwtlSrRpaEVAg86JPvWLjplOPsn/MjzZOtXPA1L9Ox1FJIqxDXGv0e9oUzs7Aa6M5q2rvDpKQn3AKanw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Synful\\Documents\\Projects\\PC\\SocketServer\\SocketServer\\SocketServer.csproj",
+  "projectFilePath": "C:\\Users\\Synful\\Documents\\Visual Studio 2019\\Projects\\SocketServer\\SocketServer\\SocketServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Synful\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\Synful\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",

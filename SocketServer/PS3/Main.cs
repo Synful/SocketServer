@@ -29,10 +29,13 @@ namespace SocketServer.PS3 {
         Socket client_listener;
 
         public Main_PS3() {
+#if DEBUG
+            Logger.inst.Info("Starting Genisys User Server in debug mode...");
+            ep = new IPEndPoint(IPAddress.Parse("192.168.1.6"), 25725);
+#else
             Logger.inst.Info("Starting Genisys User Server...");
-
             ep = new IPEndPoint(IPAddress.Parse("147.135.120.177"), 25725);
-            //ep = new IPEndPoint(IPAddress.Parse("192.168.1.8"), 25725);
+#endif
 
             clients = new List<Client>();
             client_listener_t = new Thread(() => client_listener_listen());
@@ -79,9 +82,7 @@ namespace SocketServer.PS3 {
             lock(this) {
                 Client c = clients.Find(x => ((x.IP.ToString() == ip.ToString()) && (x.Port == port)));
                 if(c != null) {
-                    c.Disconnect();
                     clients.Remove(c);
-                    Logger.inst.Info($"Removed Client: {c.IP}:{c.Port}");
                     return true;
                 } else {
                     return false;

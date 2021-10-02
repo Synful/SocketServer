@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 namespace SocketServer.Utils {
     public class Message {
         private NetworkStream stream;
+        private bool reverse_bytes;
 
-        public Message(NetworkStream s) {
+        public Message(NetworkStream s, bool rb = true) {
             stream = s;
+            reverse_bytes = rb;
         }
 
         #region Write
@@ -25,17 +27,23 @@ namespace SocketServer.Utils {
         }
         public void write_int(int i) {
             byte[] buffer = BitConverter.GetBytes(i);
-            Array.Reverse(buffer);
+            if(reverse_bytes) {
+                Array.Reverse(buffer);
+            }
             write_data(buffer, 4);
         }
         public void write_uint(uint i) {
             byte[] buffer = BitConverter.GetBytes(i);
-            Array.Reverse(buffer);
+            if(reverse_bytes) {
+                Array.Reverse(buffer);
+            }
             write_data(buffer, 4);
         }
         public void write_float(float f) {
             byte[] buffer = BitConverter.GetBytes(f);
-            Array.Reverse(buffer);
+            if(reverse_bytes) {
+                Array.Reverse(buffer);
+            }
             write_data(buffer, 4);
         }
         public void write_bool(bool b) {
@@ -70,7 +78,9 @@ namespace SocketServer.Utils {
         }
         public int read_int() {
             byte[] buffer = read_data(4);
-            Array.Reverse(buffer);
+            if(reverse_bytes) {
+                Array.Reverse(buffer);
+            }
             return BitConverter.ToInt32(buffer);
         }
         public bool read_bool() {

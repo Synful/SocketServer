@@ -1,0 +1,7 @@
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\SocketAdmin.csproj.AssemblyReference.cache
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\Theme\ModernButton.baml
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\Theme\ToolbarButton.baml
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\LoginWindow.g.cs
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\App.g.cs
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\SocketAdmin_MarkupCompile.cache
+C:\Users\Synful\Documents\Projects\PC\SocketServer\SocketAdmin\obj\Release\SocketAdmin_MarkupCompile.lref

@@ -27,7 +27,7 @@ namespace SocketServer.PS3.ViewModels {
         }
 
         private static Database _instance;
-        public static Database instance {
+        public static Database inst {
             get {
                 if(_instance == null) {
                     _instance = new Database();
@@ -47,9 +47,9 @@ namespace SocketServer.PS3.ViewModels {
                                                               $"&cs={i.checksum}" +
                                                               $"&ver={i.version}" +
                                                               $"&reauth={i.reauth}" +
-                                                              $"&free_mode={Settings.instance.freemode}" +
-                                                              $"&checksum={Settings.instance.checksum}" +
-                                                              $"&version={Settings.instance.version}").Split('|');
+                                                              $"&free_mode={Settings.inst.freemode}" +
+                                                              $"&checksum={Settings.inst.checksum}" +
+                                                              $"&version={Settings.inst.version}").Split('|');
                 
                 i.name = response[0];
                 return (Auth_Codes)(int.Parse(response[1]));

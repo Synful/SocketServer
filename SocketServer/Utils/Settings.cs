@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SocketServer.Utils {
     public class Settings {
         private static Settings _inst;
-        public static Settings instance {
+        public static Settings inst {
             get {
                 if(_inst == null) {
                     _inst = new Settings();

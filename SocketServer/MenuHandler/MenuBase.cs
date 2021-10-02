@@ -11,6 +11,15 @@ using Console = SocketServer.Utils.Console;
 
 namespace SocketServer.MenuHandler {
     public class MenuBase {
+        static MenuBase _inst;
+        public static MenuBase inst {
+            get {
+                if(_inst == null)
+                    _inst = new MenuBase();
+                return _inst;
+            }
+        }
+
         Thread render_t;
         Thread choice_t;
         Thread settings_t;
@@ -52,7 +61,7 @@ namespace SocketServer.MenuHandler {
                             //Environment.Exit(0);
                             break;
                         case "reload":
-                            Settings.instance.Load();
+                            Settings.inst.Load();
                             break;
                     }
                 } catch { };
@@ -62,7 +71,7 @@ namespace SocketServer.MenuHandler {
         void settings_thread() {
             while(true) {
                 try {
-                    Settings.instance.Load();
+                    Settings.inst.Load();
                 } catch { }
                 Thread.Sleep(60 * 1000);
             }
@@ -73,13 +82,13 @@ namespace SocketServer.MenuHandler {
 
             Console.write("Latest Version", ConsoleColor.Cyan);
             Console.write(": ", ConsoleColor.Gray);
-            Console.write($"{Settings.instance.version}", ConsoleColor.White);
+            Console.write($"{Settings.inst.version}", ConsoleColor.White);
 
             Console.write(" | ", ConsoleColor.Gray);
 
             Console.write("Is Freemode", ConsoleColor.Cyan);
             Console.write(": ", ConsoleColor.Gray);
-            Console.write($"{Settings.instance.freemode}", ConsoleColor.White);
+            Console.write($"{Settings.inst.freemode}", ConsoleColor.White);
 
             Console.write(" | ", ConsoleColor.Gray);
 

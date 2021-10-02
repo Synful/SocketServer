@@ -24,7 +24,7 @@ namespace SocketAdmin {
         public LoginWindow() {
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            server = new Server(IPAddress.Parse("192.168.1.8"), 38426);
+            server = new Server(IPAddress.Parse("192.168.1.2"), 38426);
             server.Connect();
             server.CommandReceived += CommandRecieved;
         }
@@ -36,7 +36,7 @@ namespace SocketAdmin {
         }
 
         private void closeBtn_Click(object sender, RoutedEventArgs e) {
-            Environment.Exit(0);
+            Application.Current.Shutdown();
         }
         private void miniBtn_Click(object sender, RoutedEventArgs e) {
             this.WindowState = WindowState.Minimized;

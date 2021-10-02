@@ -31,7 +31,7 @@ namespace SocketServer.PS3 {
         public Main_PS3() {
 #if DEBUG
             Logger.inst.Info("Starting Genisys User Server in debug mode...");
-            ep = new IPEndPoint(IPAddress.Parse("192.168.1.6"), 25725);
+            ep = new IPEndPoint(IPAddress.Parse("192.168.1.2"), 25725);
 #else
             Logger.inst.Info("Starting Genisys User Server...");
             ep = new IPEndPoint(IPAddress.Parse("147.135.120.177"), 25725);
@@ -109,7 +109,7 @@ namespace SocketServer.PS3 {
                 case cmdType.Auth:
                     ClientInfo i = e.auth.info;
 
-                    i.code = Database.instance.AuthClient(i);
+                    i.code = Database.inst.AuthClient(i);
 
                     if(i.name != "")
                         Logger.inst.Auth(i);

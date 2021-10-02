@@ -12,7 +12,8 @@ namespace SocketServer.PC.Commands {
 
         public enum cmdType : int {
             Unknown,
-            Auth
+            Auth,
+            Disconnect
         }
 
         public command(cmdType type, IPAddress ip) {

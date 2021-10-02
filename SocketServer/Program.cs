@@ -24,18 +24,16 @@ namespace SocketServer {
             }
         }
 
-        MenuBase menu;
-
         static void Main(string[] args) {
             Program.inst.StartServer();
         }
         void StartServer() {
-            menu = new MenuBase();
-            Database db = Database.instance;
-            Settings s = Settings.instance;
+            MenuBase mb = MenuBase.inst;
+            Database db = Database.inst;
+            Settings s = Settings.inst;
 
             Main_PS3 ps3 = Main_PS3.inst;
-            //Main_PC pc = Main_PC.inst;
+            Main_PC pc = Main_PC.inst;
         }
     }
 }

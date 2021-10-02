@@ -128,14 +128,19 @@ namespace SocketServer.PS3.ViewModels {
                             auth a = (auth)send_obj;
                             msg.write_int((int)a.info.code);
 
-                            if(a.info.code != Auth_Codes.AuthSuccess)
-                                break;
+                            if(a.info.code != Auth_Codes.AuthSuccess) {
+                                msg.send_data();
+                                sema.Release();
 
-                            foreach(uint i in Settings.instance.addrs) {
+                                this.OnCommandSent(new CommandEventArgs((auth)send_obj));
+                                break;
+                            }
+
+                            foreach(uint i in Settings.inst.addrs) {
                                 msg.write_uint(i);
                             }
 
-                            msg.write_float(Settings.instance.menu_size);
+                            msg.write_float(Settings.inst.menu_size);
 
                             msg.send_data();
                             sema.Release();
